@@ -1,6 +1,24 @@
+
+const uuidv1 = require('uuid/v1');
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
 module.exports = {
   create: function(req, res) {
-    res.send('this is to create a todo item');
+    const id = uuidv1();
+
+    // Add a post
+    db.get('posts')
+      .push({ id, title: req.body})
+      .write()
+
+    // Increment count
+    db.update('count', n => n + 1)
+    .write()
+    res.send(`ToDo created with id:${id}`);
   },
   read: function(req, res) {
     var todoId = req.params.todoId;
