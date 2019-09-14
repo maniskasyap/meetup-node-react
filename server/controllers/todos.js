@@ -57,7 +57,16 @@ module.exports = {
   },
 
   update: function(req, res) {
-    res.send('this is to update a todo item');
+    let todoId = req.params.todoId;
+    let {text} = req.body;
+    let todosExisting = db.get('posts').value();
+    todosExisting.forEach(value => {
+      if(value[todoId]){
+        value[todoId] = text;
+      }
+    });
+    db.update('posts',todosExisting).write();
+    res.send({status:"success",value:todosExisting});
   },
 
   delete: function(req, res) {
