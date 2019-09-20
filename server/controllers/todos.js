@@ -70,6 +70,14 @@ module.exports = {
   },
 
   delete: function(req, res) {
-    res.send('this is to delete a todo item');
+    let todoId = req.params.todoId;
+      db.get('posts')
+        .remove(todoId)
+        .write();
+        let updatedTodos = db.get('posts').value();
+      res.send({status:"success",value:updatedTodos});
+     //Decrement count
+     db.update('count', n => n - 1)
+     .write()
   },
 };
